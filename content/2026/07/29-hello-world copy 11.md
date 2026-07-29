@@ -1,6 +1,6 @@
 ---
 title: Hello World
-date: 2026-07-29
+date: "2026-07-29 16:00"
 category:
   parent: 日記
   child: 雑談
