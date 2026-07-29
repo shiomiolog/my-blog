@@ -130,6 +130,18 @@ if (!page.value) {
 // SEOメタ情報の設定
 useSeoMeta({
   title: `${page.value.title} | 潮の香りのする猫の足跡`,
-  description: page.value.description
+  description: page.value.description,
+  ogTitle: page.value.title,
+  ogDescription: page.value.description,
+  ogType: 'article',
+  twitterCard: 'summary_large_image'
+})
+
+// OGP画像の自動生成 (タイトル・カテゴリーを反映)
+defineOgImage('BlogPost', {
+  title: page.value.title,
+  category: page.value.category
+    ? `${page.value.category.parent} / ${page.value.category.child}`
+    : undefined
 })
 </script>

@@ -4,17 +4,26 @@
         <!-- 全体を包むメインボックス -->
         <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-100">
 
-            <!-- 絞り込み中のヘッダー表示 (追加) -->
-            <div v-if="selectedCategory" class="mb-6 pb-4 border-b border-slate-100 flex items-center justify-between">
-                <div class="flex items-center gap-2">
+            <!-- 絞り込み中のヘッダー表示 -->
+            <div v-if="selectedCategory || monthQuery"
+                class="mb-6 pb-4 border-b border-slate-100 flex items-center justify-between">
+                <div class="flex items-center gap-2 flex-wrap">
                     <span class="text-xs text-slate-500 font-medium">絞り込み中:</span>
-                    <span
+
+                    <span v-if="selectedCategory"
                         class="inline-flex items-center text-xs font-medium rounded overflow-hidden border border-sky-100">
                         <span class="bg-sky-50 text-sky-700 px-2.5 py-1">
                             {{ selectedCategory.parent }}
                         </span>
                         <span v-if="selectedCategory.child" class="bg-sky-100/60 text-sky-800 px-2.5 py-1">
                             {{ selectedCategory.child }}
+                        </span>
+                    </span>
+
+                    <span v-if="monthQuery"
+                        class="inline-flex items-center text-xs font-medium rounded overflow-hidden border border-sky-100">
+                        <span class="bg-sky-50 text-sky-700 px-2.5 py-1">
+                            {{ monthQuery }}
                         </span>
                     </span>
                 </div>
@@ -50,17 +59,16 @@
                             </time>
 
                             <!-- カテゴリータグ (クリックでそのカテゴリーに絞り込めるリンクに変更) -->
-                            <NuxtLink v-if="post.category"
-                                :to="{ path: '/', query: { category: post.category.parent, subCategory: post.category.child } }"
-                                class="inline-flex items-center text-xs font-medium rounded overflow-hidden border border-sky-100 hover:opacity-80 transition-opacity"
-                                @click.stop>
+                            <span v-if="post.category"
+                                class="inline-flex items-center text-xs font-medium rounded overflow-hidden border border-sky-100 hover:opacity-80 transition-opacity cursor-pointer"
+                                @click.stop.prevent="goToCategory(post.category)">
                                 <span class="bg-sky-50 text-sky-700 px-2 py-0.5">
                                     {{ post.category.parent }}
                                 </span>
                                 <span class="bg-sky-100/60 text-sky-800 px-2 py-0.5">
                                     {{ post.category.child }}
                                 </span>
-                            </NuxtLink>
+                            </span>
                         </div>
                     </NuxtLink>
                 </li>
@@ -99,6 +107,16 @@ const route = useRoute()
 const currentPage = computed(() => Math.max(1, Number(route.query.page) || 1))
 const categoryQuery = computed(() => route.query.category as string | undefined)
 const subCategoryQuery = computed(() => route.query.subCategory as string | undefined)
+const monthQuery = computed(() => route.query.month as string | undefined)
+
+const router = useRouter()
+
+function goToCategory(category: { parent: string; child: string }) {
+    router.push({
+        path: '/',
+        query: { category: category.parent, subCategory: category.child }
+    })
+}
 
 // 選択中のカテゴリー表示用
 const selectedCategory = computed(() => {
@@ -109,36 +127,36 @@ const selectedCategory = computed(() => {
     }
 })
 
-// データ取得 (キーにカテゴリーパラメータを追加し、URL変更時に再取得させる)
+// データ取得 (キーにカテゴリー・月パラメータを追加し、URL変更時に再取得させる)
 const { data } = await useAsyncData(
-    () => `posts-page-${currentPage.value}-cat-${categoryQuery.value || 'all'}-sub-${subCategoryQuery.value || 'all'}`,
+    () => `posts-page-${currentPage.value}-cat-${categoryQuery.value || 'all'}-sub-${subCategoryQuery.value || 'all'}-month-${monthQuery.value || 'all'}`,
     async () => {
-        // ベースのクエリ構築
-        let countQuery = queryCollection('content')
-        let postsQuery = queryCollection('content')
+        // 全件取得
+        const allPosts = await queryCollection('content').order('date', 'DESC').all()
 
-        // 親カテゴリーでの絞り込み
-        if (categoryQuery.value) {
-            countQuery = countQuery.where('category.parent', '=', categoryQuery.value)
-            postsQuery = postsQuery.where('category.parent', '=', categoryQuery.value)
-        }
+        // JS側で絞り込み
+        const filtered = allPosts.filter((post) => {
+            if (categoryQuery.value && post.category?.parent !== categoryQuery.value) {
+                return false
+            }
+            if (subCategoryQuery.value && post.category?.child !== subCategoryQuery.value) {
+                return false
+            }
+            if (monthQuery.value && String(post.date).slice(0, 7) !== monthQuery.value) {
+                return false
+            }
+            return true
+        })
 
-        // 子カテゴリーでの絞り込み
-        if (subCategoryQuery.value) {
-            countQuery = countQuery.where('category.child', '=', subCategoryQuery.value)
-            postsQuery = postsQuery.where('category.child', '=', subCategoryQuery.value)
-        }
-
-        const total = await countQuery.count()
-        const posts = await postsQuery
-            .order('date', 'DESC')
-            .limit(PER_PAGE)
-            .skip((currentPage.value - 1) * PER_PAGE)
-            .all()
+        const total = filtered.length
+        const posts = filtered.slice(
+            (currentPage.value - 1) * PER_PAGE,
+            currentPage.value * PER_PAGE
+        )
 
         return { posts, total }
     },
-    { watch: [currentPage, categoryQuery, subCategoryQuery] }
+    { watch: [currentPage, categoryQuery, subCategoryQuery, monthQuery] }
 )
 
 const posts = computed(() => data.value?.posts ?? [])

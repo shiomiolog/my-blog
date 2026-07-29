@@ -21,7 +21,7 @@
 
                 <ul class="ml-4 pl-3 border-l-2 border-sky-100 space-y-1 mt-1">
                     <li v-for="child in children" :key="child">
-                        <NuxtLink :to="{ path: '/', query: { category: `${parent}:${child}` } }"
+                        <NuxtLink :to="{ path: '/', query: { category: parent, subCategory: child } }"
                             class="text-slate-500 hover:text-sky-600 transition-colors block py-1 px-2 rounded hover:bg-sky-50/60">
                             {{ child }}
                         </NuxtLink>
