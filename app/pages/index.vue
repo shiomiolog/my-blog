@@ -127,14 +127,14 @@ const selectedCategory = computed(() => {
     }
 })
 
-// データ取得 (キーにカテゴリー・月パラメータを追加し、URL変更時に再取得させる)
+// データ取得
 const { data } = await useAsyncData(
     () => `posts-page-${currentPage.value}-cat-${categoryQuery.value || 'all'}-sub-${subCategoryQuery.value || 'all'}-month-${monthQuery.value || 'all'}`,
     async () => {
         // 全件取得
-        const allPosts = await queryCollection('content').order('date', 'DESC').all()
+        const allPosts = await queryCollection('content').all()
 
-        // JS側で絞り込み
+        // 1. JS側で絞り込み
         const filtered = allPosts.filter((post) => {
             if (categoryQuery.value && post.category?.parent !== categoryQuery.value) {
                 return false
@@ -146,6 +146,13 @@ const { data } = await useAsyncData(
                 return false
             }
             return true
+        })
+
+        // 2. 日時（date）でソート（新しい順：降順）
+        filtered.sort((a, b) => {
+            const dateA = new Date(a.date || 0).getTime()
+            const dateB = new Date(b.date || 0).getTime()
+            return dateB - dateA // 新しい日時が上に来るように降順
         })
 
         const total = filtered.length
