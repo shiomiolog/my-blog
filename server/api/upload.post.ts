@@ -3,9 +3,17 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
 export default defineEventHandler(async (event) => {
+  // 🔽 本番環境（import.meta.dev が false）の場合は 404 を返して無効化
+  if (!import.meta.dev) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Page not found'
+    })
+  }
+
   // 1. API Key チェック
   const apiKey = getHeader(event, 'x-api-key')
-  const config = useRuntimeConfig()
+  const config = useRuntimeConfig(event)
   if (!apiKey || apiKey !== config.uploadApiKey) {
     throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
   }
