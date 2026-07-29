@@ -10,7 +10,7 @@
                 <span v-if="selectedCategory"
                     class="px-2 py-0.5 bg-white border border-sky-200 text-sky-700 rounded font-medium text-xs">
                     {{ selectedCategory.parent }} <span v-if="selectedCategory.child">/ {{ selectedCategory.child
-                    }}</span>
+                        }}</span>
                 </span>
 
                 <!-- 月別タグ -->
@@ -53,7 +53,6 @@
     </div>
 </template>
 
-<!-- pages/index.vue の <script setup> 部分 -->
 <script setup lang="ts">
 definePageMeta({
     layout: 'two-column'
