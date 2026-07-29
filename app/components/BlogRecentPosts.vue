@@ -22,11 +22,16 @@
 </template>
 
 <script setup lang="ts">
-// 最新3件の記事を取得
-const { data: recentPosts } = await useAsyncData('recent-posts', () => {
+const { data: recentPosts, refresh } = await useAsyncData('recent-posts', () => {
     return queryCollection('content')
         .order('date', 'DESC')
         .limit(3)
         .all()
+})
+
+onMounted(() => {
+    if (!recentPosts.value || recentPosts.value.length === 0) {
+        refresh()
+    }
 })
 </script>

@@ -33,10 +33,17 @@
 </template>
 
 <script setup lang="ts">
-const { data: posts } = await useAsyncData('all-categories', () => {
+const { data: posts, refresh } = await useAsyncData('all-categories', () => {
     return queryCollection('content').all()
 })
 
+onMounted(() => {
+    if (!posts.value || posts.value.length === 0) {
+        refresh()
+    }
+})
+
+// (以下 categoryTree 等のロジックは変更なし)
 const categoryTree = computed(() => {
     const tree: Record<string, Set<string>> = {}
 

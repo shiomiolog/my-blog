@@ -53,6 +53,7 @@
     </div>
 </template>
 
+<!-- pages/index.vue の <script setup> 部分 -->
 <script setup lang="ts">
 definePageMeta({
     layout: 'two-column'
@@ -77,7 +78,7 @@ const selectedCategory = computed(() => {
     }
 })
 
-// 絞り込み解除処理（クエリなしのトップURLへ戻す）
+// 絞り込み解除処理
 const clearFilter = () => {
     router.push('/')
 }
@@ -89,14 +90,12 @@ function goToCategory(category: { parent: string; child: string }) {
     })
 }
 
-// データ取得
-const { data } = await useAsyncData(
+// 💡 useAsyncData の設定を強化
+const { data, refresh } = await useAsyncData(
     'home-posts',
     async () => {
-        // 全件取得
         const allPosts = await queryCollection('content').all()
 
-        // 1. JS側で絞り込み
         const filtered = allPosts.filter((post) => {
             if (categoryQuery.value && post.category?.parent !== categoryQuery.value) {
                 return false
@@ -110,7 +109,6 @@ const { data } = await useAsyncData(
             return true
         })
 
-        // 2. 日時（date）でソート（降順）
         filtered.sort((a, b) => {
             const dateA = new Date(a.date || 0).getTime()
             const dateB = new Date(b.date || 0).getTime()
@@ -128,10 +126,17 @@ const { data } = await useAsyncData(
     { watch: [currentPage, categoryQuery, subCategoryQuery, monthQuery] }
 )
 
+// 💡 SSR時に空データで渡ってきた場合にクライアントで自動補完
+onMounted(() => {
+    if (!data.value || data.value.posts.length === 0) {
+        refresh()
+    }
+})
+
 const posts = computed(() => data.value?.posts ?? [])
 const totalPages = computed(() => Math.max(1, Math.ceil((data.value?.total ?? 0) / PER_PAGE)))
 
-// 1. トップページ用 SEO メタ情報
+// SEO メタ情報 & OGP
 useSeoMeta({
     title: '潮の香りのする猫の足跡',
     description: '汐猫みおのブログ・日常の記録',

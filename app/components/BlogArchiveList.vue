@@ -37,8 +37,14 @@
 </template>
 
 <script setup lang="ts">
-const { data: posts } = await useAsyncData('all-archives', () => {
+const { data: posts, refresh } = await useAsyncData('all-archives', () => {
     return queryCollection('content').all()
+})
+
+onMounted(() => {
+    if (!posts.value || posts.value.length === 0) {
+        refresh()
+    }
 })
 
 interface MonthItem {
