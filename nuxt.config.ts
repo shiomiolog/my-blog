@@ -7,7 +7,12 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
   ],
   devtools: { enabled: true },
-  compatibilityDate: '2024-04-03',
+  compatibilityDate: '2026-07-29',
+
+  // 🔽 ここを追加！ (.env の NUXT_UPLOAD_API_KEY を自動紐付けします)
+  runtimeConfig: {
+    uploadApiKey: process.env.NUXT_UPLOAD_API_KEY
+  },
 
   fonts: {
     families: [
