@@ -16,9 +16,11 @@
                     汐猫みお / SHIONE Mio
                 </p>
                 <p class="text-sm text-slate-600 mt-1">
-                    Nuxt 4 と TypeScript でブログを開発中！
+                    she/her / YouTuber（個人勢）<br />
+                    Researcher? (Security, AI, Info Law) <br />
+                    放送大・学部全科生&修士選科生<br />
+                    学士（IT総合学）
                 </p>
-
                 <a href="https://twitter.com/shiomiolog" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-slate-900
                 hover:bg-slate-700 transition-colors px-4 py-2 rounded-full">
                     <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">

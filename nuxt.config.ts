@@ -9,6 +9,22 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   compatibilityDate: '2026-07-29',
 
+  // Nuxt Content v3 の設定
+  content: {
+    build: {
+      markdown: {
+        // 見出しのアンカーリンク（<a>タグ）の自動生成をオフにする
+        toc: {
+          depth: 0,
+          searchDepth: 0
+        },
+        highlight: {
+          theme: 'github-light'
+        }
+      }
+    }
+  },
+
   // (.env の NUXT_UPLOAD_API_KEY を自動紐付け)
   runtimeConfig: {
     uploadApiKey: process.env.NUXT_UPLOAD_API_KEY
@@ -29,5 +45,5 @@ export default defineNuxtConfig({
         pages.push(...filteredPages)
       }
     }
-  }
+  },
 })
