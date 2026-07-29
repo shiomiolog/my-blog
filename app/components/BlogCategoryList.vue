@@ -6,7 +6,12 @@
             カテゴリー
         </h3>
 
-        <div class="space-y-2 text-sm">
+        <!-- 読み込み中表示 -->
+        <div v-if="pending && !posts?.length" class="text-xs text-slate-400 animate-pulse">
+            読み込み中...
+        </div>
+
+        <div v-else class="space-y-2 text-sm">
             <details v-for="(children, parent) in categoryTree" :key="parent" open class="group">
                 <summary
                     class="font-semibold text-slate-700 cursor-pointer list-none flex items-center justify-between py-1.5 px-2 rounded-md hover:bg-sky-50 hover:text-sky-600 transition-colors">
@@ -33,9 +38,9 @@
 </template>
 
 <script setup lang="ts">
-const { data: posts, refresh } = await useAsyncData('all-categories', () => {
+const { data: posts, pending, refresh } = useAsyncData('all-categories', () => {
     return queryCollection('content').all()
-})
+}, { lazy: true })
 
 onMounted(() => {
     if (!posts.value || posts.value.length === 0) {
@@ -43,7 +48,6 @@ onMounted(() => {
     }
 })
 
-// (以下 categoryTree 等のロジックは変更なし)
 const categoryTree = computed(() => {
     const tree: Record<string, Set<string>> = {}
 

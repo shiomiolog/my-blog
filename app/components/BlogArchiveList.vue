@@ -6,8 +6,12 @@
             アーカイブ
         </h3>
 
-        <div class="space-y-2 text-sm">
-            <!-- 配列に変更したため (group, index) でループします -->
+        <!-- 読み込み中表示 -->
+        <div v-if="pending && !posts?.length" class="text-xs text-slate-400 animate-pulse">
+            読み込み中...
+        </div>
+
+        <div v-else class="space-y-2 text-sm">
             <details v-for="(group, index) in archiveTree" :key="group.year" :open="index === 0" class="group">
                 <summary
                     class="font-semibold text-slate-700 cursor-pointer list-none flex items-center justify-between py-1.5 px-2 rounded-md hover:bg-sky-50 hover:text-sky-600 transition-colors">
@@ -37,9 +41,9 @@
 </template>
 
 <script setup lang="ts">
-const { data: posts, refresh } = await useAsyncData('all-archives', () => {
+const { data: posts, pending, refresh } = useAsyncData('all-archives', () => {
     return queryCollection('content').all()
-})
+}, { lazy: true })
 
 onMounted(() => {
     if (!posts.value || posts.value.length === 0) {
@@ -61,7 +65,6 @@ interface YearGroup {
 const archiveTree = computed<YearGroup[]>(() => {
     if (!posts.value) return []
 
-    // 1. 年月ごとに件数を集計
     const rawCounts: Record<string, number> = {}
 
     for (const post of posts.value) {
@@ -70,7 +73,6 @@ const archiveTree = computed<YearGroup[]>(() => {
         rawCounts[yearMonth] = (rawCounts[yearMonth] || 0) + 1
     }
 
-    // 2. 年ごとにまとめるための中間マップを作成
     const yearsMap: Record<string, MonthItem[]> = {}
 
     for (const [ym, count] of Object.entries(rawCounts)) {
@@ -89,12 +91,10 @@ const archiveTree = computed<YearGroup[]>(() => {
         yearsMap[year].push({ month, monthStr, count })
     }
 
-    // 3. 配列（Array）に変換して「年の降順（新しい順）」で確実にソート！
     return Object.keys(yearsMap)
-        .sort((a, b) => Number(b) - Number(a)) // 2026, 2025...
+        .sort((a, b) => Number(b) - Number(a))
         .map(year => ({
             year,
-            // 月も新しい順（12月, 11月...）でソート
             months: (yearsMap[year] || []).sort((a, b) => b.month - a.month)
         }))
 })
