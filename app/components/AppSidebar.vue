@@ -7,6 +7,11 @@
                 <span class="w-1.5 h-4 bg-sky-400 rounded-full"></span>
                 プロフィール
             </h3>
+            <p>
+                <span class="text-lg font-bold">
+                    汐猫みお / SHIONE Mio
+                </span>
+            </p>
             <p class="text-sm text-slate-600">
                 Nuxt 4 と TypeScript でブログを開発中！
             </p>
