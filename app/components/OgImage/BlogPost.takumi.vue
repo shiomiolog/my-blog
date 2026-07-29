@@ -6,6 +6,7 @@
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
             background: #ffffff;
             border: 15px solid #7dd3fc;
             padding: 48px 56px;
@@ -36,7 +37,7 @@
             </span>
         </div>
 
-        <!-- 中央: タイトル → 線 → カテゴリー (上下左右中央揃え) -->
+        <!-- 中央: タイトル → 線 → カテゴリー -->
         <div style="
             flex: 1;
             display: flex;
@@ -54,13 +55,13 @@
                 {{ title }}
             </span>
 
-            <!-- タイトル下の淡い青線 (全幅) -->
+            <!-- タイトル下の淡い青線 -->
             <div style="
                 height: 3px;
                 width: 100%;
                 background: #7dd3fc;
-                margin-top: 28px;
-                margin-bottom: 20px;
+                margin-top: 24px;
+                margin-bottom: 16px;
                 border-radius: 2px;
             "></div>
 
@@ -72,6 +73,18 @@
                 {{ category }}
             </span>
         </div>
+
+        <!-- 下部: 名前 & 日付 (左下) -->
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; pt-2;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+                <span style="font-size: 18px; font-weight: 700; color: #334155;">
+                    {{ author || '汐猫みお' }}
+                </span>
+                <span v-if="date" style="font-size: 14px; color: #94a3b8; font-weight: 500;">
+                    {{ date }}
+                </span>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -79,6 +92,8 @@
 const props = defineProps<{
     title: string
     category?: string
+    author?: string
+    date?: string
 }>()
 
 // タイトルの文字数に応じてフォントサイズを調整
