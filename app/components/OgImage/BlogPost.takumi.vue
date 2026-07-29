@@ -75,7 +75,7 @@
         </div>
 
         <!-- 下部: 名前 & 日付 (左下) -->
-        <div style="display: flex; align-items: flex-end; justify-content: space-between; pt-2;">
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; padding-top: 8px;">
             <div style="display: flex; flex-direction: column; gap: 2px;">
                 <span style="font-size: 18px; font-weight: 700; color: #334155;">
                     {{ author || '汐猫みお' }}
