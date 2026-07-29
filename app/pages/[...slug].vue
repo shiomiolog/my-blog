@@ -138,7 +138,7 @@ useSeoMeta({
 })
 
 // OGP画像の自動生成 (タイトル・カテゴリーを反映)
-defineOgImage('BlogPost', {
+defineOgImage('BlogPostTakumi', {
   title: page.value.title,
   category: page.value.category
     ? `${page.value.category.parent} / ${page.value.category.child}`

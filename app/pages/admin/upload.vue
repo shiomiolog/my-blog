@@ -12,11 +12,15 @@
         <!-- 1. ファイル選択エリア -->
         <div @dragover.prevent @drop.prevent="handleDrop"
             class="border-2 border-dashed border-sky-200 bg-sky-50/50 rounded-lg p-6 text-center hover:bg-sky-50 transition-colors cursor-pointer">
-            <p class="text-sm text-slate-600 font-medium">
+            <p v-if="!isCompressing" class="text-sm text-slate-600 font-medium">
                 ここに画像をドラッグ＆ドロップ<br />またはファイルを選択
             </p>
+            <p v-else class="text-sm text-sky-600 font-bold animate-pulse">
+                WebPへ変換・圧縮中... ⚡
+            </p>
 
-            <input type="file" class="hidden" id="fileInput" @change="handleFileSelect" accept="image/*" multiple />
+            <input type="file" ref="fileInputRef" class="hidden" id="fileInput" @change="handleFileSelect"
+                accept="image/*" multiple />
             <label for="fileInput"
                 class="mt-3 inline-block px-4 py-1.5 bg-sky-500 text-white text-xs font-semibold rounded hover:bg-sky-600 cursor-pointer">
                 ファイルを選択
@@ -27,7 +31,7 @@
         <div v-if="pendingFiles.length > 0" class="p-4 bg-sky-50/60 rounded-lg border border-sky-200 space-y-3">
             <div class="flex items-center justify-between border-b border-sky-100 pb-2">
                 <h2 class="text-xs font-bold text-sky-800">選択中のファイル（{{ pendingFiles.length }}件）</h2>
-                <button @click="pendingFiles = []" class="text-xs text-slate-400 hover:text-slate-600">
+                <button @click="clearPendingFiles" class="text-xs text-slate-400 hover:text-slate-600">
                     すべて解除
                 </button>
             </div>
@@ -38,6 +42,10 @@
                     class="relative bg-white p-2 rounded border border-slate-200 flex flex-col items-center">
                     <img :src="item.previewUrl" class="w-full h-24 object-cover rounded mb-1" />
                     <p class="text-[10px] text-slate-600 truncate w-full text-center">{{ item.file.name }}</p>
+                    <p class="text-[9px] text-emerald-600 font-bold">
+                        {{ (item.originalSize / 1024 / 1024).toFixed(1) }}MB → {{ (item.file.size / 1024).toFixed(0)
+                        }}KB
+                    </p>
 
                     <!-- 個別削除ボタン -->
                     <button @click="removePendingFile(index)"
@@ -68,10 +76,8 @@
             <div class="space-y-3">
                 <div v-for="(item, index) in uploadedHistory" :key="index"
                     class="p-3 bg-slate-50 rounded border border-slate-200 flex items-center gap-4">
-                    <!-- サムネイル画像 -->
                     <img :src="item.url" class="w-16 h-16 object-cover rounded border bg-white flex-shrink-0" />
 
-                    <!-- 情報 & コピーフォーム -->
                     <div class="flex-1 min-w-0 space-y-1">
                         <p class="text-xs font-medium text-slate-700 truncate">{{ item.filename }}</p>
                         <div class="flex items-center gap-2">
@@ -91,6 +97,8 @@
 </template>
 
 <script setup lang="ts">
+import imageCompression from 'browser-image-compression'
+
 if (!process.dev) {
     throw showError({
         statusCode: 404,
@@ -101,6 +109,7 @@ if (!process.dev) {
 interface PendingFile {
     file: File
     previewUrl: string
+    originalSize: number
 }
 
 interface UploadedItem {
@@ -110,9 +119,11 @@ interface UploadedItem {
 }
 
 const apiKey = ref('')
+const isCompressing = ref(false)
 const isUploading = ref(false)
 const pendingFiles = ref<PendingFile[]>([])
 const uploadedHistory = ref<UploadedItem[]>([])
+const fileInputRef = ref<HTMLInputElement | null>(null)
 
 const selectText = (e: Event) => {
     const target = e.target as HTMLInputElement | null
@@ -128,24 +139,68 @@ const copyToClipboard = async (text: string) => {
     }
 }
 
-// ファイルの追加処理（プレビュー用一時URLを発行して待機リストへ保存）
-const addFilesToPending = (files: FileList | File[]) => {
-    for (const file of Array.from(files)) {
-        if (!file.type.startsWith('image/')) continue
-        pendingFiles.value.push({
-            file,
-            previewUrl: URL.createObjectURL(file)
-        })
+// 画像圧縮・WebP化の設定と処理
+const compressImage = async (file: File): Promise<File> => {
+    const options = {
+        maxSizeMB: 1,           // 最大1MB以下に抑える
+        maxWidthOrHeight: 1920, // 長辺の最大サイズを 1920px にリサイズ
+        useWebWorker: true,     // バックグラウンドで高速処理
+        fileType: 'image/webp'  // 自動で WebP フォーマットへ変換
+    }
+
+    try {
+        const compressedBlob = await imageCompression(file, options)
+        const newFileName = file.name.replace(/\.[^/.]+$/, "") + ".webp"
+        return new File([compressedBlob], newFileName, { type: 'image/webp' })
+    } catch (error) {
+        console.error('圧縮エラー:', error)
+        return file
     }
 }
 
-// 選択したファイルを個別に解除
-const removePendingFile = (index: number) => {
-    URL.revokeObjectURL(pendingFiles.value[index].previewUrl)
-    pendingFiles.value.splice(index, 1)
+// ファイル選択時に自動圧縮
+const addFilesToPending = async (files: FileList | File[]) => {
+    isCompressing.value = true
+
+    try {
+        const fileList = Array.from(files)
+        for (const file of fileList) {
+            if (!file || !file.type.startsWith('image/')) continue
+
+            const compressedFile = await compressImage(file)
+
+            pendingFiles.value.push({
+                file: compressedFile,
+                previewUrl: URL.createObjectURL(compressedFile),
+                originalSize: file.size
+            })
+        }
+    } finally {
+        isCompressing.value = false
+    }
 }
 
-// ボタンを押したときに初めて実際のアップロードを実行
+const removePendingFile = (index: number) => {
+    const item = pendingFiles.value[index]
+    if (item) {
+        URL.revokeObjectURL(item.previewUrl)
+        pendingFiles.value.splice(index, 1)
+    }
+}
+
+const clearPendingFiles = () => {
+    pendingFiles.value.forEach(item => {
+        if (item?.previewUrl) {
+            URL.revokeObjectURL(item.previewUrl)
+        }
+    })
+    pendingFiles.value = []
+    const inputEl = fileInputRef.value
+    if (inputEl) {
+        inputEl.value = ''
+    }
+}
+
 const uploadPendingFiles = async () => {
     if (!apiKey.value) {
         alert('API Keyを入力してください')
@@ -158,10 +213,11 @@ const uploadPendingFiles = async () => {
 
     try {
         for (const item of pendingFiles.value) {
+            if (!item) continue
             const file = item.file
 
-            // 1. 署名URLを取得
-            const res = await $fetch('/api/upload', {
+            // 1. 署名URLと日付番号付きファイル名を取得
+            const res = await $fetch<{ uploadUrl: string; publicUrl: string; markdown: string }>('/api/upload', {
                 method: 'POST',
                 headers: { 'x-api-key': apiKey.value },
                 body: {
@@ -170,31 +226,35 @@ const uploadPendingFiles = async () => {
                 }
             })
 
-            // 2. R2へ直接アップロード
+            // 2. R2へアップロード
             await fetch(res.uploadUrl, {
                 method: 'PUT',
                 headers: { 'Content-Type': file.type },
                 body: file
             })
 
-            // 3. 履歴へ追加
+            // 3. サーバーが命名したファイル名を履歴に保存
+            const savedFileName = res.publicUrl.split('/').pop() || file.name
+
             uploadedHistory.value.unshift({
-                filename: file.name,
+                filename: savedFileName,
                 url: res.publicUrl,
                 markdown: res.markdown
             })
 
-            // 一時URLのメモリ解放
             URL.revokeObjectURL(item.previewUrl)
         }
 
-        // 待機リストを空にする
         pendingFiles.value = []
+        const inputEl = fileInputRef.value
+        if (inputEl) {
+            inputEl.value = ''
+        }
 
-        // 直近の1件のMarkdownをコピー
-        if (uploadedHistory.value.length > 0) {
+        const firstHistory = uploadedHistory.value[0]
+        if (firstHistory) {
             try {
-                await navigator.clipboard.writeText(uploadedHistory.value[0].markdown)
+                await navigator.clipboard.writeText(firstHistory.markdown)
             } catch (e) {
                 console.warn('自動コピー失敗:', e)
             }
@@ -210,11 +270,11 @@ const uploadPendingFiles = async () => {
 
 const handleDrop = (e: DragEvent) => {
     const files = e.dataTransfer?.files
-    if (files) addFilesToPending(files)
+    if (files && files.length > 0) addFilesToPending(files)
 }
 
 const handleFileSelect = (e: Event) => {
-    const target = e.target as HTMLInputElement
-    if (target.files) addFilesToPending(target.files)
+    const target = e.target as HTMLInputElement | null
+    if (target?.files && target.files.length > 0) addFilesToPending(target.files)
 }
 </script>

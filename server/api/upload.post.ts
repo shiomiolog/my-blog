@@ -1,14 +1,11 @@
 // server/api/upload.post.ts
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { S3Client, PutObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
 export default defineEventHandler(async (event) => {
-  // 🔽 本番環境（import.meta.dev が false）の場合は 404 を返して無効化
-  if (!import.meta.dev) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Page not found'
-    })
+  // 本番環境ガード
+  if (!process.dev) {
+    throw createError({ statusCode: 404, statusMessage: 'Page not found' })
   }
 
   // 1. API Key チェック
@@ -20,11 +17,13 @@ export default defineEventHandler(async (event) => {
 
   // 2. リクエストボディを取得
   const body = await readBody(event)
-  const filename = body?.filename || 'image.png'
-  const contentType = body?.contentType || 'image/png'
+  const contentType = body?.contentType || 'image/webp'
+  const extension = contentType.includes('webp') ? 'webp' : 'png'
 
   // 3. S3 Client の初期化
   const accountId = process.env.R2_ACCOUNT_ID
+  const bucketName = 'my-blog-assets' // ご自身のバケット名
+
   const s3 = new S3Client({
     region: 'auto',
     endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
@@ -34,23 +33,35 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  const timestamp = Date.now()
-  const originalName = filename.replace(/\s+/g, '_')
-  const key = `posts/${timestamp}-${originalName}`
+  // 📅 今日の日付（YYYY-MM-DD）を取得
+  const today = new Date().toISOString().split('T')[0] // 例: "2026-07-29"
+  const prefix = `posts/${today}-`
 
-  const command = new PutObjectCommand({
-    Bucket: 'my-blog-assets',
-    Key: key,
-    ContentType: contentType
+  // 🔍 本日アップロード済みのファイル一覧を取得してカウント（何番目かを特定）
+  const listCommand = new ListObjectsV2Command({
+    Bucket: bucketName,
+    Prefix: prefix,
   })
 
-  // 4. 署名付きURLの発行（有効期限10分）
+  const existingObjects = await s3.send(listCommand)
+  const count = (existingObjects.Contents?.length || 0) + 1
+
+  // 📝 最終的なファイルパスを作成 (例: posts/2026-07-29-1.webp)
+  const key = `${prefix}${count}.${extension}`
+
+  const command = new PutObjectCommand({
+    Bucket: bucketName,
+    Key: key,
+    ContentType: contentType,
+  })
+
+  // 4. 署名付きURLの発行
   const uploadUrl = await getSignedUrl(s3, command, { expiresIn: 600 })
-  const publicUrl = `https://blog-asset.shiomiolog.com/${key}`
+  const publicUrl = `https://blog-asset.shiomiolog.com/${key}` // ご自身のドメイン
 
   return {
     uploadUrl,
     publicUrl,
-    markdown: `![${originalName}](${publicUrl})`
+    markdown: `![${today}-${count}](${publicUrl})`
   }
 })
