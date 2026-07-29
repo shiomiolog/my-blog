@@ -1,96 +1,54 @@
-<!-- pages/index.vue -->
 <template>
-    <div>
-        <!-- 全体を包むメインボックス -->
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-100">
+    <div class="max-w-4xl mx-auto py-8 px-4">
+        <!-- 絞り込み表示 & 解除ボタンエリア -->
+        <div v-if="selectedCategory || monthQuery"
+            class="mb-6 p-3 bg-sky-50 border border-sky-200 rounded-lg flex items-center justify-between text-sm">
+            <div class="flex items-center gap-2 flex-wrap text-slate-700">
+                <span class="font-bold text-sky-800">絞り込み中:</span>
 
-            <!-- 絞り込み中のヘッダー表示 -->
-            <div v-if="selectedCategory || monthQuery"
-                class="mb-6 pb-4 border-b border-slate-100 flex items-center justify-between">
-                <div class="flex items-center gap-2 flex-wrap">
-                    <span class="text-xs text-slate-500 font-medium">絞り込み中:</span>
-
-                    <span v-if="selectedCategory"
-                        class="inline-flex items-center text-xs font-medium rounded overflow-hidden border border-sky-100">
-                        <span class="bg-sky-50 text-sky-700 px-2.5 py-1">
-                            {{ selectedCategory.parent }}
-                        </span>
-                        <span v-if="selectedCategory.child" class="bg-sky-100/60 text-sky-800 px-2.5 py-1">
-                            {{ selectedCategory.child }}
-                        </span>
-                    </span>
-
-                    <span v-if="monthQuery"
-                        class="inline-flex items-center text-xs font-medium rounded overflow-hidden border border-sky-100">
-                        <span class="bg-sky-50 text-sky-700 px-2.5 py-1">
-                            {{ monthQuery }}
-                        </span>
-                    </span>
-                </div>
-                <!-- 絞り込み解除ボタン -->
-                <NuxtLink to="/" class="text-xs text-slate-400 hover:text-sky-600 transition-colors">
-                    ✕ 絞り込みを解除
-                </NuxtLink>
-            </div>
-
-            <!-- 記事がない場合のメッセージ -->
-            <div v-if="posts.length === 0" class="py-12 text-center text-slate-400 text-sm">
-                該当する記事が見つかりませんでした。
-            </div>
-
-            <!-- 記事一覧 -->
-            <ul v-else class="divide-y divide-slate-100">
-                <li v-for="post in posts" :key="post.path" class="py-4 first:pt-0 last:pb-0">
-                    <NuxtLink :to="post.path" class="block group">
-                        <!-- タイトル -->
-                        <h2 class="text-lg font-semibold text-slate-800 group-hover:text-sky-600 transition-colors">
-                            {{ post.title }}
-                        </h2>
-
-                        <!-- 概要 (description) -->
-                        <p v-if="post.description" class="text-sm text-slate-600 mt-1.5 line-clamp-2">
-                            {{ post.description }}
-                        </p>
-
-                        <!-- 日付 & カテゴリータグ -->
-                        <div class="flex items-center gap-2 mt-2">
-                            <time class="text-xs text-slate-400">
-                                {{ post.date }}
-                            </time>
-
-                            <!-- カテゴリータグ (クリックでそのカテゴリーに絞り込めるリンクに変更) -->
-                            <span v-if="post.category"
-                                class="inline-flex items-center text-xs font-medium rounded overflow-hidden border border-sky-100 hover:opacity-80 transition-opacity cursor-pointer"
-                                @click.stop.prevent="goToCategory(post.category)">
-                                <span class="bg-sky-50 text-sky-700 px-2 py-0.5">
-                                    {{ post.category.parent }}
-                                </span>
-                                <span class="bg-sky-100/60 text-sky-800 px-2 py-0.5">
-                                    {{ post.category.child }}
-                                </span>
-                            </span>
-                        </div>
-                    </NuxtLink>
-                </li>
-            </ul>
-
-            <!-- ページネーション -->
-            <div v-if="totalPages > 1"
-                class="flex justify-center items-center gap-4 mt-8 pt-6 border-t border-slate-100">
-                <NuxtLink v-if="currentPage > 1" :to="{ query: { ...route.query, page: currentPage - 1 } }"
-                    class="text-sm font-medium text-sky-600 hover:text-sky-700 hover:underline px-3 py-1 rounded-md hover:bg-sky-50 transition-colors">
-                    ← 前へ
-                </NuxtLink>
-
-                <span class="text-sm text-slate-400">
-                    {{ currentPage }} / {{ totalPages }}
+                <!-- カテゴリータグ -->
+                <span v-if="selectedCategory"
+                    class="px-2 py-0.5 bg-white border border-sky-200 text-sky-700 rounded font-medium text-xs">
+                    {{ selectedCategory.parent }} <span v-if="selectedCategory.child">/ {{ selectedCategory.child
+                    }}</span>
                 </span>
 
-                <NuxtLink v-if="currentPage < totalPages" :to="{ query: { ...route.query, page: currentPage + 1 } }"
-                    class="text-sm font-medium text-sky-600 hover:text-sky-700 hover:underline px-3 py-1 rounded-md hover:bg-sky-50 transition-colors">
-                    次へ →
-                </NuxtLink>
+                <!-- 月別タグ -->
+                <span v-if="monthQuery"
+                    class="px-2 py-0.5 bg-white border border-sky-200 text-sky-700 rounded font-medium text-xs">
+                    📅 {{ monthQuery }}
+                </span>
             </div>
+
+            <!-- 全解除ボタン -->
+            <button @click="clearFilter"
+                class="text-xs font-semibold text-slate-500 hover:text-red-500 hover:bg-white px-2 py-1 rounded transition-colors flex items-center gap-1">
+                ✕ 絞り込み解除
+            </button>
+        </div>
+
+        <h1 class="text-2xl font-bold mb-6 text-slate-800">
+            {{ (selectedCategory || monthQuery) ? '絞り込み結果' : '記事一覧' }}
+        </h1>
+
+        <!-- 記事が存在する場合 -->
+        <div v-if="posts && posts.length > 0" class="space-y-4">
+            <NuxtLink v-for="post in posts" :key="post.path" :to="post.path"
+                class="block p-5 bg-white rounded-lg border border-slate-100 hover:border-sky-300 hover:shadow-sm transition-all">
+                <h2 class="text-lg font-bold text-slate-800 mb-2">{{ post.title }}</h2>
+                <p class="text-sm text-slate-500 line-clamp-2 mb-3">{{ post.description }}</p>
+                <div class="text-xs text-slate-400">
+                    <time v-if="post.date">{{ post.date }}</time>
+                </div>
+            </NuxtLink>
+        </div>
+
+        <!-- ゼロ件の場合の表示 -->
+        <div v-else class="text-center py-12 text-slate-400">
+            <p>条件に一致する記事が見つかりませんでした。</p>
+            <button @click="clearFilter" class="mt-3 text-xs text-sky-600 underline hover:text-sky-800">
+                すべての記事を表示する
+            </button>
         </div>
     </div>
 </template>
@@ -102,21 +60,13 @@ definePageMeta({
 
 const PER_PAGE = 10
 const route = useRoute()
+const router = useRouter()
 
 // クエリパラメータの監視
 const currentPage = computed(() => Math.max(1, Number(route.query.page) || 1))
 const categoryQuery = computed(() => route.query.category as string | undefined)
 const subCategoryQuery = computed(() => route.query.subCategory as string | undefined)
 const monthQuery = computed(() => route.query.month as string | undefined)
-
-const router = useRouter()
-
-function goToCategory(category: { parent: string; child: string }) {
-    router.push({
-        path: '/',
-        query: { category: category.parent, subCategory: category.child }
-    })
-}
 
 // 選択中のカテゴリー表示用
 const selectedCategory = computed(() => {
@@ -127,9 +77,21 @@ const selectedCategory = computed(() => {
     }
 })
 
+// 絞り込み解除処理（クエリなしのトップURLへ戻す）
+const clearFilter = () => {
+    router.push('/')
+}
+
+function goToCategory(category: { parent: string; child: string }) {
+    router.push({
+        path: '/',
+        query: { category: category.parent, subCategory: category.child }
+    })
+}
+
 // データ取得
 const { data } = await useAsyncData(
-    () => `posts-page-${currentPage.value}-cat-${categoryQuery.value || 'all'}-sub-${subCategoryQuery.value || 'all'}-month-${monthQuery.value || 'all'}`,
+    'home-posts',
     async () => {
         // 全件取得
         const allPosts = await queryCollection('content').all()
@@ -148,11 +110,11 @@ const { data } = await useAsyncData(
             return true
         })
 
-        // 2. 日時（date）でソート（新しい順：降順）
+        // 2. 日時（date）でソート（降順）
         filtered.sort((a, b) => {
             const dateA = new Date(a.date || 0).getTime()
             const dateB = new Date(b.date || 0).getTime()
-            return dateB - dateA // 新しい日時が上に来るように降順
+            return dateB - dateA
         })
 
         const total = filtered.length

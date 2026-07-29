@@ -48,6 +48,10 @@ description: 海辺の街で出会った猫たちと、潮の香りが漂う路�
 
 ---
 
+::link-card{url="https://github.com/shiomiolog/my-blog"}
+::
+
+
 ## コードの書き方テスト
 
 ブログ内でプログラムコードを紹介する時の表示テストです。

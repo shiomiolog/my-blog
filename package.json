@@ -18,6 +18,7 @@
     "@takumi-rs/wasm": "^2.5.3",
     "better-sqlite3": "^12.11.1",
     "browser-image-compression": "^2.0.2",
+    "node-html-parser": "^9.0.1",
     "nuxt": "^4.5.1",
     "vue": "^3.5.40",
     "vue-router": "^5.2.0"
