@@ -168,4 +168,21 @@ const { data } = await useAsyncData(
 
 const posts = computed(() => data.value?.posts ?? [])
 const totalPages = computed(() => Math.max(1, Math.ceil((data.value?.total ?? 0) / PER_PAGE)))
+
+// 1. トップページ用 SEO メタ情報
+useSeoMeta({
+    title: '潮の香りのする猫の足跡',
+    description: '汐猫みおのブログ・日常の記録',
+    ogTitle: '潮の香りのする猫の足跡',
+    ogDescription: '汐猫みおのブログ・日常の記録',
+    ogType: 'website',
+    twitterCard: 'summary_large_image'
+})
+
+defineOgImage('BlogPostTakumi', {
+    title: '潮の香りのする猫の足跡',
+    category: '汐猫みおのブログ',
+    author: '汐猫みお',
+    date: '2026-07-29'
+})
 </script>
