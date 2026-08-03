@@ -10,7 +10,7 @@
                 <span v-if="selectedCategory"
                     class="px-2 py-0.5 bg-white border border-sky-200 text-sky-700 rounded font-medium text-xs">
                     {{ selectedCategory.parent }} <span v-if="selectedCategory.child">/ {{ selectedCategory.child
-                        }}</span>
+                    }}</span>
                 </span>
 
                 <!-- 月別タグ -->
@@ -145,7 +145,7 @@ useSeoMeta({
     twitterCard: 'summary_large_image'
 })
 
-defineOgImage('BlogPostTakumi', {
+defineOgImage('ShiomioBlogTakumi', {
     title: '潮の香りのする猫の足跡',
     category: '汐猫みおのブログ',
     author: '汐猫みお',
