@@ -2,9 +2,9 @@
 export default defineNuxtConfig({
   // 💡 1. OGP画像の絶対パス生成に必要なサイトURL（ご自身の本番ドメインに変更してください）
   site: {
-    url: 'https://shiomiolog.com'
+    url: 'https://blog.shiomiolog.com',
+    name: '潮の香りのする猫の足跡'
   },
-
   modules: [
     '@nuxt/content',
     '@nuxtjs/tailwindcss',
@@ -17,7 +17,7 @@ export default defineNuxtConfig({
   // 💡 2. nuxt-og-image の動作設定
   ogImage: {
     // コンポーネント経由での描画設定を有効化
-    enabled: true
+    enabled: true,
   },
 
   // Nuxt Content v3 の設定
