@@ -1,5 +1,10 @@
 // nuxt.config.ts
 export default defineNuxtConfig({
+  // 💡 1. OGP画像の絶対パス生成に必要なサイトURL（ご自身の本番ドメインに変更してください）
+  site: {
+    url: 'https://shiomiolog.com'
+  },
+
   modules: [
     '@nuxt/content',
     '@nuxtjs/tailwindcss',
@@ -8,6 +13,12 @@ export default defineNuxtConfig({
   ],
   devtools: { enabled: true },
   compatibilityDate: '2026-07-29',
+
+  // 💡 2. nuxt-og-image の動作設定
+  ogImage: {
+    // コンポーネント経由での描画設定を有効化
+    enabled: true
+  },
 
   // Nuxt Content v3 の設定
   content: {
