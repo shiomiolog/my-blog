@@ -1,6 +1,6 @@
 // nuxt.config.ts
 export default defineNuxtConfig({
-  // 💡 1. OGP画像の絶対パス生成に必要なサイトURL（ご自身の本番ドメインに変更してください）
+  // 💡 1. OGP画像の絶対パス生成に必要なサイトURL
   site: {
     url: 'https://blog.shiomiolog.com',
     name: '潮の香りのする猫の足跡'
@@ -14,10 +14,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   compatibilityDate: '2026-07-29',
 
-  // 💡 2. nuxt-og-image の動作設定
+  // 💡 2. nuxt-og-image の動作設定 (Cloudflare Workers CPU制限回避)
   ogImage: {
-    // コンポーネント経由での描画設定を有効化
     enabled: true,
+    // サーバー実行時(Worker)の動的SVG/PNG変換をオフにし、ビルド時/事前生成画像を利用
+    zeroRuntime: true
   },
 
   // Nuxt Content v3 の設定
