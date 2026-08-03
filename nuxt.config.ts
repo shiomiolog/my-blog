@@ -12,9 +12,18 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
   ],
 
-  // 💡 型エラーの出ない標準設定
+  nitro: {
+    preset: 'cloudflare_module',
+    prerender: {
+      crawlLinks: true,
+      routes: ['/']
+    }
+  },
+
   ogImage: {
-    enabled: true
+    enabled: true,
+    zeroRuntime: true,
+    runtimeCacheStorage: false
   },
 
   devtools: { enabled: true },
