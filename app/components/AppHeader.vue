@@ -51,7 +51,7 @@
                     Contact
                 </NuxtLink>
 
-                <a href="https://example.com" target="_blank" rel="noopener noreferrer"
+                <a href="https://shiomiolog.com" target="_blank" rel="noopener noreferrer"
                     class="inline-flex items-center gap-1 rounded-md px-3 py-2 transition-colors hover:bg-sky-50 hover:text-sky-700 sm:p-0 sm:hover:bg-transparent">
                     Portal
                     <svg class="h-3.5 w-3.5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"
