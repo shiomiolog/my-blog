@@ -1,4 +1,4 @@
-<!-- components/OgImage/BlogPost.takumi.vue -->
+<!-- components/OgImage/ShiomioBlog.takumi.vue -->
 <template>
     <div style="
             width: 100%;
@@ -23,11 +23,13 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 24px;
+                    color: #0369a1;
+                    font-size: 22px;
+                    font-weight: 700;
                 ">
-                    🐾
+                    M
                 </div>
-                <span style="font-size: 24px; color: #0f172a; font-weight: 600;">
+                <span style="font-size: 24px; color: #0f172a; font-weight: 700;">
                     汐猫みお
                 </span>
             </div>
@@ -80,7 +82,7 @@
                 <span style="font-size: 18px; font-weight: 700; color: #334155;">
                     {{ author || '汐猫みお' }}
                 </span>
-                <span v-if="date" style="font-size: 14px; color: #94a3b8; font-weight: 500;">
+                <span v-if="date" style="font-size: 14px; color: #94a3b8; font-weight: 400;">
                     {{ date }}
                 </span>
             </div>

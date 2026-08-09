@@ -142,6 +142,8 @@ defineOgImage('ShiomioBlogTakumi', {
   title: page.value.title,
   category: page.value.category
     ? `${page.value.category.parent} / ${page.value.category.child}`
-    : undefined
+    : undefined,
+  author: '汐猫みお',
+  date: page.value.date
 })
 </script>

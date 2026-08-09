@@ -50,7 +50,20 @@ export default defineNuxtConfig({
 
   fonts: {
     families: [
-      { name: 'Noto Sans JP', provider: 'google', global: true }
+      {
+        name: 'Noto Sans JP',
+        src: '/fonts/NotoSansJP-Regular.woff2',
+        weight: 400,
+        style: 'normal',
+        global: true
+      },
+      {
+        name: 'Noto Sans JP',
+        src: '/fonts/NotoSansJP-Bold.woff2',
+        weight: 700,
+        style: 'normal',
+        global: true
+      }
     ]
   },
 
