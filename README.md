@@ -68,6 +68,10 @@ pnpm preview
 # yarn
 yarn preview
 
+# bun
+bun run preview
+```
+
 
 ## 記事の作成と公開
 
