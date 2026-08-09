@@ -144,8 +144,4 @@ GitHubへのpush後、Cloudflareで自動的にビルド・公開されます。
 
 記事ごとにOGP画像を手動で作成する必要はありません。
 
-# bun
-bun run preview
-```
-
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
