@@ -103,6 +103,8 @@
             prose-a:text-sky-600 hover:prose-a:text-sky-500">
         <ContentRenderer :value="page" />
       </div>
+
+      <ArticleShare :title="page.title" :path="route.path" />
       <!-- 3. フッター (一覧へ戻るボタン) -->
       <footer class="mt-12 pt-6 border-t border-slate-100 flex justify-between items-center">
         <NuxtLink to="/"
@@ -117,10 +119,16 @@
 <script setup lang="ts">
 const route = useRoute()
 
-// 記事データの取得
-const { data: page } = await useAsyncData('page-' + route.path, () => {
-  return queryCollection('content').path(route.path).first()
+// 末尾スラッシュの有無にかかわらず、同じ記事パスとして扱う
+const contentPath = computed(() => {
+  return route.path === '/' ? '/' : route.path.replace(/\/+$/, '')
 })
+
+// 記事データの取得
+const { data: page } = await useAsyncData(
+  `page-${contentPath.value}`,
+  () => queryCollection('content').path(contentPath.value).first()
+)
 
 // 記事が存在しない場合は 404 エラー
 if (!page.value) {
