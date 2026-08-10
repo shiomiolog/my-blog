@@ -1,33 +1,44 @@
-<!-- pages/contact.vue -->
 <template>
-    <div class="max-w-3xl mx-auto space-y-8">
-        <!-- ヘッダーカード -->
-        <div class="bg-white p-6 sm:p-8 rounded-lg shadow-sm border border-slate-100">
-            <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 flex items-center gap-2">
-                <span class="w-1.5 h-6 bg-sky-400 rounded-full"></span>
+    <div class="mx-auto max-w-4xl">
+        <header class="border-b border-slate-300 pb-10">
+            <p class="mb-5 text-xs font-semibold tracking-[0.24em] text-[#5A98D8]">
+                CONTACT
+            </p>
+
+            <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
                 お問い合わせ
             </h1>
-            <p class="text-slate-600 text-sm sm:text-base leading-relaxed mt-3">
-                当ブログに関するご意見・ご感想、ご質問や各種ご依頼などは、以下のフォームよりお気軽にお送りください。
+
+            <p class="mt-5 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+                当ブログに関するご意見・ご感想、ご質問や各種ご依頼などは、
+                以下のフォームよりお送りください。
             </p>
-        </div>
+        </header>
 
-        <!-- Google フォーム埋め込みエリア -->
-        <div class="bg-white p-2 sm:p-4 rounded-lg shadow-sm border border-slate-100">
-            <iframe
-                src="https://docs.google.com/forms/d/e/1FAIpQLSe-hOmVKTut8PVtStHtviIJXSEOixi7yHk8N4bRuRRJN6B7Kw/viewform?embedded=true"
-                class="w-full border-0 h-[800px] sm:h-[900px]" loading="lazy">
-                読み込んでいます…
-            </iframe>
-        </div>
+        <section class="grid gap-6 border-b border-slate-300 py-10 sm:grid-cols-[10rem_1fr]">
+            <div>
+                <p class="text-xs font-semibold tracking-[0.2em] text-[#5A98D8]">
+                    01
+                </p>
+                <h2 class="mt-2 text-base font-bold text-slate-900">
+                    Contact Form
+                </h2>
+            </div>
 
-        <!-- 記事一覧へ戻る -->
-        <div class="text-center pt-2">
-            <NuxtLink to="/"
-                class="inline-flex items-center gap-2 text-sm font-medium text-sky-600 hover:text-sky-700 hover:underline px-4 py-2 rounded-md hover:bg-sky-50 transition-colors">
-                ← トップページに戻る
+            <div class="min-w-0 border-t border-slate-200 pt-4">
+                <iframe
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSe-hOmVKTut8PVtStHtviIJXSEOixi7yHk8N4bRuRRJN6B7Kw/viewform?embedded=true"
+                    title="お問い合わせフォーム" class="h-[800px] w-full border-0 sm:h-[900px]" loading="lazy">
+                    読み込んでいます…
+                </iframe>
+            </div>
+        </section>
+
+        <footer class="pt-8">
+            <NuxtLink to="/" class="text-sm text-slate-500 transition-colors hover:text-[#5A98D8]">
+                ← 記事一覧へ戻る
             </NuxtLink>
-        </div>
+        </footer>
     </div>
 </template>
 

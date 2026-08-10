@@ -1,53 +1,76 @@
 <template>
-    <div class="max-w-4xl mx-auto py-8 px-4">
-        <!-- 絞り込み表示 & 解除ボタンエリア -->
+    <div class="py-4">
         <div v-if="selectedCategory || monthQuery"
-            class="mb-6 p-3 bg-sky-50 border border-sky-200 rounded-lg flex items-center justify-between text-sm">
-            <div class="flex items-center gap-2 flex-wrap text-slate-700">
-                <span class="font-bold text-sky-800">絞り込み中:</span>
-
-                <!-- カテゴリータグ -->
-                <span v-if="selectedCategory"
-                    class="px-2 py-0.5 bg-white border border-sky-200 text-sky-700 rounded font-medium text-xs">
-                    {{ selectedCategory.parent }} <span v-if="selectedCategory.child">/ {{ selectedCategory.child
-                    }}</span>
+            class="mb-9 flex flex-wrap items-center justify-between gap-3 border-y border-slate-300 py-3 text-sm">
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <span class="font-mono text-[10px] tracking-[0.18em] text-[#5A98D8]">
+                    FILTER
                 </span>
 
-                <!-- 月別タグ -->
-                <span v-if="monthQuery"
-                    class="px-2 py-0.5 bg-white border border-sky-200 text-sky-700 rounded font-medium text-xs">
-                    📅 {{ monthQuery }}
+                <span v-if="selectedCategory" class="text-slate-700">
+                    {{ selectedCategory.parent }}
+                    <template v-if="selectedCategory.child">
+                        / {{ selectedCategory.child }}
+                    </template>
+                </span>
+
+                <span v-if="monthQuery" class="font-mono text-xs text-slate-600">
+                    {{ monthQuery }}
                 </span>
             </div>
 
-            <!-- 全解除ボタン -->
-            <button @click="clearFilter"
-                class="text-xs font-semibold text-slate-500 hover:text-red-500 hover:bg-white px-2 py-1 rounded transition-colors flex items-center gap-1">
-                ✕ 絞り込み解除
+            <button type="button"
+                class="font-mono text-[10px] tracking-[0.12em] text-slate-500 transition-colors hover:text-[#5A98D8]"
+                @click="clearFilter">
+                CLEAR FILTER
             </button>
         </div>
 
-        <h1 class="text-2xl font-bold mb-6 text-slate-800">
-            {{ (selectedCategory || monthQuery) ? '絞り込み結果' : '記事一覧' }}
-        </h1>
+        <header class="mb-8">
+            <p class="font-mono text-[10px] tracking-[0.28em] text-[#5A98D8]">
+                NOTES
+            </p>
+            <h1 class="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
+                {{ (selectedCategory || monthQuery) ? '絞り込み結果' : '記事一覧' }}
+            </h1>
+        </header>
 
-        <!-- 記事が存在する場合 -->
-        <div v-if="posts && posts.length > 0" class="space-y-4">
+        <div v-if="posts && posts.length > 0" class="border-t border-slate-300">
             <NuxtLink v-for="post in posts" :key="post.path" :to="post.path"
-                class="block p-5 bg-white rounded-lg border border-slate-100 hover:border-sky-300 hover:shadow-sm transition-all">
-                <h2 class="text-lg font-bold text-slate-800 mb-2">{{ post.title }}</h2>
-                <p class="text-sm text-slate-500 line-clamp-2 mb-3">{{ post.description }}</p>
-                <div class="text-xs text-slate-400">
-                    <time v-if="post.date">{{ post.date }}</time>
+                class="group grid gap-3 border-b border-slate-300 py-7 sm:grid-cols-[8rem_1fr] sm:gap-6">
+                <div class="font-mono text-[11px] leading-relaxed text-slate-500">
+                    <time v-if="post.date">
+                        {{ post.date }}
+                    </time>
+
+                    <p v-if="post.category" class="mt-1 text-[#5A98D8]">
+                        {{ post.category.parent }} / {{ post.category.child }}
+                    </p>
+                </div>
+
+                <div>
+                    <h2
+                        class="text-xl font-semibold leading-snug tracking-tight text-slate-900 transition-colors group-hover:text-[#5A98D8]">
+                        {{ post.title }}
+                    </h2>
+
+                    <p class="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+                        {{ post.description }}
+                    </p>
+
+                    <span
+                        class="mt-4 inline-block font-mono text-[10px] tracking-[0.14em] text-slate-400 transition-colors group-hover:text-[#5A98D8]">
+                        READ NOTE →
+                    </span>
                 </div>
             </NuxtLink>
         </div>
 
-        <!-- ゼロ件の場合の表示 -->
-        <div v-else class="text-center py-12 text-slate-400">
+        <div v-else class="border-y border-slate-300 py-14 text-center text-sm text-slate-500">
             <p>条件に一致する記事が見つかりませんでした。</p>
-            <button @click="clearFilter" class="mt-3 text-xs text-sky-600 underline hover:text-sky-800">
-                すべての記事を表示する
+            <button type="button" class="mt-4 font-mono text-[10px] tracking-[0.14em] text-[#5A98D8]"
+                @click="clearFilter">
+                SHOW ALL NOTES
             </button>
         </div>
     </div>

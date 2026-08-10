@@ -1,127 +1,171 @@
-<!-- pages/about.vue -->
 <template>
-    <div class="max-w-3xl mx-auto space-y-8">
-        <!-- ヘッダーカード -->
-        <div class="bg-white p-6 sm:p-10 rounded-lg shadow-sm border border-slate-100 text-center">
-            <!-- 🐾アイコンから画像に変更 -->
-            <div
-                class="w-24 h-24 mx-auto mb-4 bg-sky-50 rounded-full flex items-center justify-center shadow-inner overflow-hidden border-2 border-white ring-2 ring-sky-100">
-                <img src="/avatar.webp" alt="汐猫みおのアバター" class="w-full h-full object-cover" />
-            </div>
-            <h1 class="text-2xl sm:text-3xl font-bold text-slate-800">汐猫みお / SHIONE Mio</h1>
-            <p class="text-sky-600 font-medium text-sm mt-1">Web Developer & Researcher</p>
-
-            <p class="text-slate-600 text-sm sm:text-base leading-relaxed mt-4 max-w-xl mx-auto">
-                研究の知見、Web・セキュリティ・低レイヤーを中心とした技術メモ、読んだ本のログ、そして日々の思考を記録する個人ブログです。
-                学んだことや試したことを言葉にして残す場所として運用しています。
+    <div class="mx-auto max-w-4xl">
+        <!-- ページ見出し -->
+        <header class="border-b border-slate-300 pb-10">
+            <p class="mb-5 text-xs font-semibold tracking-[0.24em] text-[#5A98D8]">
+                ABOUT
             </p>
-        </div>
+
+            <div class="grid gap-8 sm:grid-cols-[1fr_auto] sm:items-end">
+                <div>
+                    <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                        汐猫みお
+                    </h1>
+
+                    <p class="mt-2 text-sm tracking-wide text-slate-500">
+                        Researcher &amp; Programmer
+                    </p>
+
+                    <p class="mt-6 max-w-2xl text-sm leading-8 text-slate-600 sm:text-base">
+                        研究の知見、Web・セキュリティ・低レイヤーを中心とした技術メモ、
+                        読んだ本のログ、そして日々の思考を記録する個人ブログです。
+                        学んだことや試したことを、言葉にして残す場所として運用しています。
+                    </p>
+                </div>
+
+                <img src="/avatar.webp" alt="汐猫みおのアバター"
+                    class="h-24 w-24 rounded-full border border-slate-300 object-cover sm:h-28 sm:w-28">
+            </div>
+        </header>
 
         <!-- ブログについて -->
-        <section class="bg-white p-6 sm:p-8 rounded-lg shadow-sm border border-slate-100 space-y-4">
-            <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-3">
-                <span class="w-1.5 h-5 bg-sky-400 rounded-full"></span>
-                このブログについて
-            </h2>
-            <p class="text-slate-600 text-sm leading-relaxed">
-                「潮の香りのする猫の足跡」は、専門的なアウトプットから日々の雑記まで、自身の活動ログをストックしておくためのブログです。主に以下の4つのテーマを中心に発信しています。
-            </p>
+        <section class="grid gap-6 border-b border-slate-300 py-10 sm:grid-cols-[10rem_1fr]">
+            <div>
+                <p class="text-xs font-semibold tracking-[0.2em] text-[#5A98D8]">
+                    01
+                </p>
+                <h2 class="mt-2 text-base font-bold text-slate-900">
+                    このブログについて
+                </h2>
+            </div>
 
-            <!-- 4つの柱（カテゴリー紹介） -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <div class="p-4 bg-sky-50/40 rounded-lg border border-sky-100/80">
-                    <div class="font-bold text-slate-800 flex items-center gap-2 mb-1">
-                        <span class="text-lg">🔬</span> 研究 (Research)
-                    </div>
-                    <p class="text-xs text-slate-600 leading-relaxed">
-                        専門分野の研究ノートや発表まとめ、論文の要約やサーベイの記録など。
-                    </p>
-                </div>
+            <div>
+                <p class="text-sm leading-7 text-slate-600">
+                    「潮の香りのする猫の足跡」は、専門的なアウトプットから日々の雑記まで、
+                    自身の活動ログをストックしておくためのブログです。
+                </p>
 
-                <div class="p-4 bg-sky-50/40 rounded-lg border border-sky-100/80">
-                    <div class="font-bold text-slate-800 flex items-center gap-2 mb-1">
-                        <span class="text-lg">💻</span> 技術 (Tech)
+                <dl class="mt-8 grid gap-x-8 sm:grid-cols-2">
+                    <div class="border-t border-slate-200 py-5">
+                        <dt class="font-semibold text-slate-900">
+                            Research
+                            <span class="ml-2 text-xs font-normal text-slate-400">研究</span>
+                        </dt>
+                        <dd class="mt-2 text-sm leading-6 text-slate-600">
+                            研究ノートや発表のまとめ、論文の要約、サーベイの記録。
+                        </dd>
                     </div>
-                    <p class="text-xs text-slate-600 leading-relaxed">
-                        Web開発（Nuxt / TS / Go等）、セキュリティ、低レイヤー（OS・コンパイラ・ネットワーク・C/Rust等）の検証・開発ログ。
-                    </p>
-                </div>
 
-                <div class="p-4 bg-sky-50/40 rounded-lg border border-sky-100/80">
-                    <div class="font-bold text-slate-800 flex items-center gap-2 mb-1">
-                        <span class="text-lg">📚</span> 読書 (Books)
+                    <div class="border-t border-slate-200 py-5">
+                        <dt class="font-semibold text-slate-900">
+                            Technology
+                            <span class="ml-2 text-xs font-normal text-slate-400">技術</span>
+                        </dt>
+                        <dd class="mt-2 text-sm leading-6 text-slate-600">
+                            Web開発、セキュリティ、OS・ネットワークなどの検証や開発ログ。
+                        </dd>
                     </div>
-                    <p class="text-xs text-slate-600 leading-relaxed">
-                        技術書・専門書から小説・新書まで、感銘を受けた書籍の書評や学びのメモ。
-                    </p>
-                </div>
 
-                <div class="p-4 bg-sky-50/40 rounded-lg border border-sky-100/80">
-                    <div class="font-bold text-slate-800 flex items-center gap-2 mb-1">
-                        <span class="text-lg">☕</span> 日常 (Life)
+                    <div class="border-t border-slate-200 py-5">
+                        <dt class="font-semibold text-slate-900">
+                            Books
+                            <span class="ml-2 text-xs font-normal text-slate-400">読書</span>
+                        </dt>
+                        <dd class="mt-2 text-sm leading-6 text-slate-600">
+                            技術書や専門書、小説、新書から得た学びと読書記録。
+                        </dd>
                     </div>
-                    <p class="text-xs text-slate-600 leading-relaxed">
-                        日々考えていることや買ってよかったもののレビュー、開発雑記や雑多な手記。
-                    </p>
-                </div>
+
+                    <div class="border-t border-slate-200 py-5">
+                        <dt class="font-semibold text-slate-900">
+                            Life
+                            <span class="ml-2 text-xs font-normal text-slate-400">日常</span>
+                        </dt>
+                        <dd class="mt-2 text-sm leading-6 text-slate-600">
+                            日々考えていることや、買ったもの、雑多な手記。
+                        </dd>
+                    </div>
+                </dl>
             </div>
         </section>
 
-        <!-- 技術構成（テックスタック） -->
-        <section class="bg-white p-6 sm:p-8 rounded-lg shadow-sm border border-slate-100 space-y-4">
-            <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-3">
-                <span class="w-1.5 h-5 bg-sky-400 rounded-full"></span>
-                このブログの技術構成
-            </h2>
-            <p class="text-slate-600 text-sm">
-                当ブログは最新の技術スタックを用いて自作・運用されています。
-            </p>
+        <!-- 技術構成 -->
+        <section class="grid gap-6 border-b border-slate-300 py-10 sm:grid-cols-[10rem_1fr]">
+            <div>
+                <p class="text-xs font-semibold tracking-[0.2em] text-[#5A98D8]">
+                    02
+                </p>
+                <h2 class="mt-2 text-base font-bold text-slate-900">
+                    技術構成
+                </h2>
+            </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm pt-2">
-                <div class="p-3 bg-slate-50 rounded-md border border-slate-100 flex items-center justify-between">
-                    <span class="font-semibold text-slate-700">Framework</span>
-                    <span class="text-xs bg-sky-100 text-sky-800 font-medium px-2.5 py-1 rounded">Nuxt 4</span>
-                </div>
-                <div class="p-3 bg-slate-50 rounded-md border border-slate-100 flex items-center justify-between">
-                    <span class="font-semibold text-slate-700">Language</span>
-                    <span class="text-xs bg-sky-100 text-sky-800 font-medium px-2.5 py-1 rounded">TypeScript</span>
-                </div>
-                <div class="p-3 bg-slate-50 rounded-md border border-slate-100 flex items-center justify-between">
-                    <span class="font-semibold text-slate-700">CMS</span>
-                    <span class="text-xs bg-sky-100 text-sky-800 font-medium px-2.5 py-1 rounded">Nuxt Content v3</span>
-                </div>
-                <div class="p-3 bg-slate-50 rounded-md border border-slate-100 flex items-center justify-between">
-                    <span class="font-semibold text-slate-700">Styling</span>
-                    <span class="text-xs bg-sky-100 text-sky-800 font-medium px-2.5 py-1 rounded">Tailwind CSS</span>
-                </div>
+            <div>
+                <p class="mb-6 text-sm leading-7 text-slate-600">
+                    このブログは、記事の執筆から公開まで自分で管理できる構成で運用しています。
+                </p>
+
+                <dl class="border-t border-slate-300 text-sm">
+                    <div class="grid grid-cols-[7rem_1fr] border-b border-slate-200 py-3">
+                        <dt class="text-slate-500">Framework</dt>
+                        <dd class="font-medium text-slate-800">Nuxt 4</dd>
+                    </div>
+
+                    <div class="grid grid-cols-[7rem_1fr] border-b border-slate-200 py-3">
+                        <dt class="text-slate-500">Language</dt>
+                        <dd class="font-medium text-slate-800">TypeScript</dd>
+                    </div>
+
+                    <div class="grid grid-cols-[7rem_1fr] border-b border-slate-200 py-3">
+                        <dt class="text-slate-500">Content</dt>
+                        <dd class="font-medium text-slate-800">Nuxt Content</dd>
+                    </div>
+
+                    <div class="grid grid-cols-[7rem_1fr] border-b border-slate-200 py-3">
+                        <dt class="text-slate-500">Styling</dt>
+                        <dd class="font-medium text-slate-800">Tailwind CSS</dd>
+                    </div>
+                </dl>
             </div>
         </section>
 
-        <!-- リンク / アカウント -->
-        <section class="bg-white p-6 sm:p-8 rounded-lg shadow-sm border border-slate-100 space-y-4">
-            <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-3">
-                <span class="w-1.5 h-5 bg-sky-400 rounded-full"></span>
-                Links & Accounts
-            </h2>
-            <div class="flex flex-wrap gap-3 pt-1">
+        <!-- リンク -->
+        <section class="grid gap-6 border-b border-slate-300 py-10 sm:grid-cols-[10rem_1fr]">
+            <div>
+                <p class="text-xs font-semibold tracking-[0.2em] text-[#5A98D8]">
+                    03
+                </p>
+                <h2 class="mt-2 text-base font-bold text-slate-900">
+                    Links
+                </h2>
+            </div>
+
+            <nav aria-label="外部リンク" class="flex flex-col">
+                <a href="https://shiomiolog.com/" target="_blank" rel="noopener noreferrer"
+                    class="group flex items-center justify-between border-t border-slate-200 py-4 text-sm text-slate-700 transition-colors hover:text-[#5A98D8]">
+                    <span>Portal</span>
+                    <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">↗</span>
+                </a>
+
                 <a href="https://github.com/shiomiolog" target="_blank" rel="noopener noreferrer"
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-md text-sm font-medium transition-colors">
-                    GitHub
+                    class="group flex items-center justify-between border-t border-slate-200 py-4 text-sm text-slate-700 transition-colors hover:text-[#5A98D8]">
+                    <span>GitHub</span>
+                    <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">↗</span>
                 </a>
+
                 <a href="https://x.com/shiomiolog" target="_blank" rel="noopener noreferrer"
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-sky-500 hover:bg-sky-400 text-white rounded-md text-sm font-medium transition-colors">
-                    X (Twitter)
+                    class="group flex items-center justify-between border-y border-slate-200 py-4 text-sm text-slate-700 transition-colors hover:text-[#5A98D8]">
+                    <span>X</span>
+                    <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">↗</span>
                 </a>
-            </div>
+            </nav>
         </section>
 
-        <!-- 記事一覧へ戻る -->
-        <div class="text-center pt-4">
-            <NuxtLink to="/"
-                class="inline-flex items-center gap-2 text-sm font-medium text-sky-600 hover:text-sky-700 hover:underline px-4 py-2 rounded-md hover:bg-sky-50 transition-colors">
-                ← トップページに戻る
+        <footer class="pt-8">
+            <NuxtLink to="/" class="text-sm text-slate-500 transition-colors hover:text-[#5A98D8]">
+                ← 記事一覧へ戻る
             </NuxtLink>
-        </div>
+        </footer>
     </div>
 </template>
 
