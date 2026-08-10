@@ -18,7 +18,7 @@ export default defineNuxtConfig({
     preset: 'cloudflare_module',
     prerender: {
       crawlLinks: true,
-      routes: ['/']
+      routes: ['/', '/feed.xml']
     }
   },
 
@@ -27,10 +27,13 @@ export default defineNuxtConfig({
     zeroRuntime: true,
     runtimeCacheStorage: false
   },
-  
+
   sitemap: {
     zeroRuntime: true,
-    exclude: ['/avatar.webp']
+    exclude: [
+      '/avatar.webp',
+      '/feed.xml'
+    ]
   },
 
   devtools: { enabled: true },
