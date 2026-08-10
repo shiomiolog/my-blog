@@ -21,6 +21,12 @@ useHead(() => ({
     {
       rel: 'canonical',
       href: canonicalUrl.value
+    },
+    {
+      rel: 'alternate',
+      type: 'application/rss+xml',
+      title: '潮の香りのする猫の足跡 RSS',
+      href: `${siteUrl}/feed.xml`
     }
   ]
 }))
