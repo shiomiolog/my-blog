@@ -1,50 +1,53 @@
-<!-- components/AppSidebar.vue -->
 <template>
-    <aside class="w-full md:w-80 space-y-6">
-        <!-- プロフィール -->
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-100">
-            <h3 class="font-bold text-lg mb-4 text-slate-800 flex items-center gap-2">
-                <span class="w-1.5 h-4 bg-sky-400 rounded-full"></span>
-                プロフィール
-            </h3>
+    <aside
+        class="mt-14 w-full border-t border-slate-300 pt-9 lg:mt-0 lg:w-72 lg:border-l lg:border-t-0 lg:pl-9 lg:pt-0 xl:w-80">
+        <section class="pb-9">
+            <p class="font-mono text-[10px] tracking-[0.22em] text-[#5A98D8]">
+                PROFILE
+            </p>
 
-            <div class="flex flex-col items-center text-center">
-                <img src="/avatar.webp" alt="汐猫みお"
-                    class="w-20 h-20 rounded-full object-cover border border-slate-100 shadow-sm" />
+            <div class="mt-5 flex items-start gap-4">
+                <img src="/avatar.webp" alt="汐猫みお" class="h-16 w-16 shrink-0 rounded-full object-cover grayscale-[15%]">
 
-                <p class="mt-3 text-lg font-bold text-slate-800">
-                    汐猫みお / SHIONE Mio
-                </p>
-                <p class="text-sm text-slate-600 mt-1">
-                    she/her / YouTuber（個人勢）<br />
-                    Researcher? (Security, AI, Info Law) <br />
-                    放送大・学部全科生&修士選科生<br />
-                    学士（IT総合学）
-                </p>
-                <a href="https://twitter.com/shiomiolog" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-slate-900
-                hover:bg-slate-700 transition-colors px-4 py-2 rounded-full">
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                    </svg>
-                    フォローする
-                </a>
+                <div>
+                    <h2 class="font-semibold leading-snug text-slate-900">
+                        汐猫みお
+                    </h2>
+                    <p class="font-mono text-[10px] tracking-wide text-slate-500">
+                        SHIONE Mio
+                    </p>
+                </div>
             </div>
-        </div>
 
-        <!-- 最新記事 -->
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-100">
+            <p class="mt-5 text-sm leading-7 text-slate-600">
+                she/her / YouTuber（個人勢）<br>
+                Researcher? — Security, AI, Info Law<br>
+                放送大学 学部全科生・修士選科生<br>
+                学士（IT総合学）
+            </p>
+
+            <a href="https://x.com/shiomiolog" target="_blank" rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 border-b border-slate-400 pb-1 text-xs text-slate-700 transition-colors hover:border-[#5A98D8] hover:text-[#5A98D8]">
+                <svg aria-hidden="true" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+
+                <span>@shiomiolog</span>
+                <span aria-hidden="true" class="font-mono text-[10px]">↗</span>
+            </a>
+        </section>
+
+        <section class="border-t border-slate-300 py-9">
             <BlogRecentPosts />
-        </div>
+        </section>
 
-        <!-- カテゴリー一覧 -->
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-100">
+        <section class="border-t border-slate-300 py-9">
             <BlogCategoryList />
-        </div>
+        </section>
 
-        <!-- アーカイブ一覧 -->
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-100">
+        <section class="border-t border-slate-300 py-9">
             <BlogArchiveList />
-        </div>
+        </section>
     </aside>
 </template>

@@ -44,13 +44,17 @@ export default defineNuxtConfig({
     build: {
       markdown: {
         toc: {
-          depth: 0,
-          searchDepth: 0
+          depth: 3,
+          searchDepth: 3
         },
         highlight: {
           theme: 'github-light'
         }
       }
+    },
+
+    renderer: {
+      anchorLinks: false
     }
   },
 
