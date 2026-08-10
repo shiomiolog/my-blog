@@ -2,10 +2,12 @@
 export default defineNuxtConfig({
   site: {
     url: 'https://blog.shiomiolog.com',
-    name: '潮の香りのする猫の足跡'
+    name: '潮の香りのする猫の足跡',
+    trailingSlash: true
   },
 
   modules: [
+    '@nuxtjs/sitemap',
     '@nuxt/content',
     '@nuxtjs/tailwindcss',
     'nuxt-og-image',
@@ -24,6 +26,11 @@ export default defineNuxtConfig({
     enabled: true,
     zeroRuntime: true,
     runtimeCacheStorage: false
+  },
+  
+  sitemap: {
+    zeroRuntime: true,
+    exclude: ['/avatar.webp']
   },
 
   devtools: { enabled: true },
