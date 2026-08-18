@@ -158,6 +158,22 @@
                         をご確認ください。
                     </p>
                 </section>
+                <section>
+                    <h3 class="font-semibold text-slate-900">
+                        4. Xの埋め込みコンテンツについて
+                    </h3>
+
+                    <p class="mt-2">
+                        当ブログでは、記事内でXの投稿を埋め込み表示する場合があります。
+                        埋め込みコンテンツの表示に際して、XがCookie等を使用し、
+                        閲覧情報を取得する場合があります。詳細は
+                        <a href="https://x.com/ja/privacy" target="_blank" rel="noopener noreferrer"
+                            class="border-b border-[#5A98D8]/40 text-[#417EBB] transition-colors hover:text-[#5A98D8]">
+                            Xのプライバシーポリシー
+                        </a>
+                        をご確認ください。
+                    </p>
+                </section>
 
                 <p class="border-t border-slate-200 pt-4 text-xs text-slate-400">
                     制定日：2026年3月30日
